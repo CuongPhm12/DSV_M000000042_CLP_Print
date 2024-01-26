@@ -17,6 +17,7 @@ function getData() {
     async: false,
     success: function (response, status, request) {
       const { res_master, res_detail, sql1, sql } = JSON.parse(response.trim());
+      // console.log(res_detail)
       let m_createdate = res_master[0].master_createdate || "";
       let mawb = res_master[0].master_no || "";
       let m_dest = res_master[0].master_destination || "";
@@ -27,7 +28,7 @@ function getData() {
       let remark = res_master[0].remark || "";
       let m_remark = "M Remark: " + res_master[0].master_remark || "";
       tbl_1 = `
-                         <div id="title_table" style="display: flex">
+                         <div class="title_table" style="display: flex">
                             <table style="height: 49px; width: 771px" border="1">
                               <tbody>
                                 <tr>
@@ -51,10 +52,10 @@ function getData() {
                                   <td style="width: 79px; text-align: center">
                                     <strong> 전송완료여부</strong>
                                   </td>
-                                  <td id="CLP_id" style="width: 79px; text-align: center">
+                                  <td class="CLP_id" style="width: 79px; text-align: center">
                                     <strong> </strong>
                                   </td>
-                                  <td id="print_yn_id" style="width: 79px; text-align: center">
+                                  <td class="print_yn_id" style="width: 79px; text-align: center">
                                     <strong> </strong>
                                   </td>
                                   <td style="width: 79px; text-align: center">
@@ -70,7 +71,7 @@ function getData() {
                               <table style="height: 13px" border="0" width="185">
                                 <tbody>
                                   <tr>
-                                    <td id="m_createdate" style="width: 175px; text-align: right">
+                                    <td class="m_createdate" style="width: 175px; text-align: right">
                                       ${m_createdate}
                                     </td>
                                   </tr>
@@ -135,10 +136,10 @@ function getData() {
                                 <td style="width: 620px; height: 13px; text-align: center" colspan="2">
                                   <strong>MAWB 마감중량</strong>
                                 </td>
-                                <td id="sum-3" style="width: 294px; height: 13px; text-align: right">
+                                <td class="sum-total-3" style="width: 294px; height: 13px; text-align: right">
                                    
                                 </td>
-                                <td id="sum-4" style="width: 265px; height: 13px; text-align: right">
+                                <td class="sum-total-4" style="width: 265px; height: 13px; text-align: right">
                                    
                                 </td>
                                 <td style="width: 413px; height: 13px; text-align: center" colspan="2">
@@ -189,10 +190,10 @@ function getData() {
                                 <td style="width: 493px; height: 13px; text-align: center">
                                   <strong>PO#</strong>
                                 </td>
-                                <td style="width: 345px; height: 13px; text-align: center">
+                                <td style="width: 345px; height: 13px; text-align: center; min-width: 60px;">
                                   <strong>H Remark</strong>
                                 </td>
-                                <td style="width: 338px; height: 13px; text-align: center">
+                                <td style="width: 338px; height: 13px; text-align: center; min-width: 50px;">
                                   <strong>담당자</strong>
                                 </td>
                                 <td style="width: 321px; height: 13px; text-align: center">
@@ -319,25 +320,25 @@ function getData() {
         is_completee += newRow;
       }
 
-      $("#data_table tbody").append(is_completee);
+      $(".headergrid2 tbody").append(is_completee);
       let height = $("#printDIV").height();
 
-      let height_tbl1 = $("#title_table").height();
-      let height_tbl2_thead = $("#data_table thead").height();
+      let height_tbl1 = $(".title_table").height();
+      let height_tbl2_thead = $(".headergrid2 thead").height();
       let sum_header_height = height_tbl1 + height_tbl2_thead;
 
-      let repeat_tr = $("#data_table .rowsrepeat");
+      let repeat_tr = $(".headergrid2 .rowsrepeat");
       let sum_height = sum_header_height;
       let i_present = 0;
       let index = 0;
 
       let content_handle = tbl_1 + tbl_2;
-
-      for (let i = i_present; i < repeat_tr.length; i++) {
+      while (i_present < repeat_tr.length) {
+        // for(let i=i_present; i<repeat_tr.length;i++){
         index++;
-        if (sum_height < 800) {
-          if (i == repeat_tr.length - 1) {
-            content_handle_after += repeat_tr[i].outerHTML;
+        if (sum_height + $(repeat_tr[i_present]).height() < 800) {
+          if (i_present == repeat_tr.length - 1) {
+            content_handle_after += repeat_tr[i_present].outerHTML;
 
             //  sum_height+= $(repeat_tr[i]).height();
             //  console.log(1)
@@ -397,10 +398,10 @@ function getData() {
                                 <td style="width: 620px; height: 13px; text-align: center" colspan="2">
                                   <strong>MAWB 마감중량</strong>
                                 </td>
-                                <td id="sum-3" style="width: 294px; height: 13px; text-align: right">
+                                <td class="sum-total-3" style="width: 294px; height: 13px; text-align: right">
                                    
                                 </td>
-                                <td id="sum-4" style="width: 265px; height: 13px; text-align: right">
+                                <td class="sum-total-4" style="width: 265px; height: 13px; text-align: right">
                                    
                                 </td>
                                 <td style="width: 413px; height: 13px; text-align: center" colspan="2">
@@ -451,10 +452,10 @@ function getData() {
                                 <td style="width: 493px; height: 13px; text-align: center">
                                   <strong>PO#</strong>
                                 </td>
-                                <td style="width: 345px; height: 13px; text-align: center">
+                                <td style="width: 345px; height: 13px; text-align: center; min-width: 60px;">
                                   <strong>H Remark</strong>
                                 </td>
-                                <td style="width: 338px; height: 13px; text-align: center">
+                                <td style="width: 338px; height: 13px; text-align: center; min-width: 50px;">
                                   <strong>담당자</strong>
                                 </td>
                                 <td style="width: 321px; height: 13px; text-align: center">
@@ -480,7 +481,7 @@ function getData() {
                              <tbody>
                              ${content_handle_after}
                               ${
-                                index == repeat_tr.length
+                                i_present == repeat_tr.length - 1
                                   ? ` <tr class="rowsfooter" style="height: 13px">
                                 <td style="width: 212px; height: 13px"> </td>
                                 <td style="width: 187px; height: 13px"> </td>
@@ -502,14 +503,14 @@ function getData() {
                                 <td style="width: 321px; height: 13px; text-align: center">
                                   <strong>HAWB</strong>
                                 </td>
-                                <td id="sum-1" style="width: 299px; height: 13px; text-align: right">
+                                <td class="sum-total-1" style="width: 299px; height: 13px; text-align: right">
                                    
                                 </td>
                                 <td style="width: 294px; height: 13px; text-align: center"> </td>
                                 <td style="width: 265px; height: 13px; text-align: center">
                                    <strong>Total</strong>
                                 </td>
-                                <td id="sum-2" style="width: 413px; height: 13px; text-align: right">
+                                <td class="sum-total-2" style="width: 413px; height: 13px; text-align: right">
                                    
                                 </td>
                                 <td style="width: 163px; height: 13px"> </td>
@@ -519,16 +520,21 @@ function getData() {
                              </tbody>
                           </table>
                           `;
+            //   console.log(content_handle_finish += (tbl_1+content_value));
             content_handle_finish += tbl_1 + content_value;
+            i_present++;
           } else {
             // console.log(sum_height,$(repeat_tr[i]).height() )
-            content_handle_after += repeat_tr[i].outerHTML;
-            sum_height += $(repeat_tr[i]).height();
+            content_handle_after += repeat_tr[i_present].outerHTML;
+            sum_height += $(repeat_tr[i_present]).height();
             //  console.log(1)
             i_present++;
           }
         } else {
           //   console.log(2)
+          // content_handle_after+=repeat_tr[i].outerHTML;
+
+          // sum_height+= $(repeat_tr[i]).height();
           let content_value = `
                           <table
                             id="data_table"
@@ -584,10 +590,10 @@ function getData() {
                                 <td style="width: 620px; height: 13px; text-align: center" colspan="2">
                                   <strong>MAWB 마감중량</strong>
                                 </td>
-                                <td id="sum-3" style="width: 294px; height: 13px; text-align: right">
+                                <td class="sum-total-3" style="width: 294px; height: 13px; text-align: right">
                                    
                                 </td>
-                                <td id="sum-4" style="width: 265px; height: 13px; text-align: right">
+                                <td class="sum-total-4" style="width: 265px; height: 13px; text-align: right">
                                    
                                 </td>
                                 <td style="width: 413px; height: 13px; text-align: center" colspan="2">
@@ -638,10 +644,10 @@ function getData() {
                                 <td style="width: 493px; height: 13px; text-align: center">
                                   <strong>PO#</strong>
                                 </td>
-                                <td style="width: 345px; height: 13px; text-align: center">
+                                <td style="width: 345px; height: 13px; text-align: center; min-width: 60px;">
                                   <strong>H Remark</strong>
                                 </td>
-                                <td style="width: 338px; height: 13px; text-align: center">
+                                <td style="width: 338px; height: 13px; text-align: center; min-width: 50px;">
                                   <strong>담당자</strong>
                                 </td>
                                 <td style="width: 321px; height: 13px; text-align: center">
@@ -667,7 +673,7 @@ function getData() {
                              <tbody>
                              ${content_handle_after}
                               ${
-                                index == repeat_tr.length
+                                i_present == repeat_tr.length - 1
                                   ? ` <tr class="rowsfooter" style="height: 13px">
                                 <td style="width: 212px; height: 13px"> </td>
                                 <td style="width: 187px; height: 13px"> </td>
@@ -689,14 +695,14 @@ function getData() {
                                 <td style="width: 321px; height: 13px; text-align: center">
                                   <strong>HAWB</strong>
                                 </td>
-                                <td id="sum-1" style="width: 299px; height: 13px; text-align: right">
+                                <td class="sum-total-1" style="width: 299px; height: 13px; text-align: right">
                                    
                                 </td>
                                 <td style="width: 294px; height: 13px; text-align: center"> </td>
                                 <td style="width: 265px; height: 13px; text-align: center">
                                    <strong>Total</strong>
                                 </td>
-                                <td id="sum-2" style="width: 413px; height: 13px; text-align: right">
+                                <td class="sum-total-2" style="width: 413px; height: 13px; text-align: right">
                                    
                                 </td>
                                 <td style="width: 163px; height: 13px"> </td>
@@ -710,6 +716,8 @@ function getData() {
           content_handle_finish += tbl_1 + content_value;
           content_handle_after = "";
           sum_height = 0;
+          // i_present++;
+          // console.log(i_present,index)
         }
       }
 
@@ -722,11 +730,11 @@ function getData() {
       let print_yn = res_master[0].print_yn || "";
       // console.log({ print_yn });
       release_request === "출고요청"
-        ? $("#CLP_id").text("O")
-        : $("#CLP_id").text("");
+        ? $(".CLP_id").text("O")
+        : $(".CLP_id").text("");
       print_yn === "Y"
-        ? $("#print_yn_id").text("O")
-        : $("#print_yn_id").text("");
+        ? $(".print_yn_id").text("O")
+        : $(".print_yn_id").text("");
     },
     error: function (xmlHttpRequest, txtStatus, errorThrown) {
       console.log("erorr");
@@ -790,14 +798,17 @@ for (let i = 0; i < elements_4.length; i++) {
   sum4 += a;
 }
 
-$("#sum-1")[0].innerText = formatNumber(getNum(sum1));
-$("#sum-2")[0].innerText = formatNumber(getNum(sum2));
-$("#sum-3")[0].innerText = formatNumber(getNum(sum3));
-$("#sum-4")[0].innerText = formatNumber(getNum(sum4));
-$("#sum-1").css("font-weight", "bold");
-$("#sum-2").css("font-weight", "bold");
-$("#sum-3").css("font-weight", "bold");
-$("#sum-4").css("font-weight", "bold");
+$(".sum-total-1")[0].innerText = formatNumber(getNum(sum1));
+$(".sum-total-2")[0].innerText = formatNumber(getNum(sum2));
+$(".sum-total-3")[0].innerText = formatNumber(getNum(sum3));
+$(".sum-total-3")[1].innerText = formatNumber(getNum(sum3));
+$(".sum-total-4")[0].innerText = formatNumber(getNum(sum4));
+$(".sum-total-4")[1].innerText = formatNumber(getNum(sum4));
+
+$(".sum-total-1").css("font-weight", "bold");
+$(".sum-total-2").css("font-weight", "bold");
+$(".sum-total-3").css("font-weight", "bold");
+$(".sum-total-4").css("font-weight", "bold");
 
 //format number
 function formatNumber(number) {
@@ -831,18 +842,36 @@ function getNum(val) {
 
 // Function to add numbering to the 순번 column
 function addSequenceNumbers() {
+  let i_now = 0;
   // Get the tbody element
   var tbody = document
-    .getElementById("data_table")
+    .getElementsByClassName("headergrid2")[0]
     .getElementsByTagName("tbody")[0];
 
   // Get all rows in the tbody
   var rows = tbody.getElementsByTagName("tr");
 
   // Iterate through the rows and add sequence number to the first cell
-  for (var i = 2; i < rows.length - 2; i++) {
-    var sequenceCell = rows[i + 1].getElementsByTagName("td")[0];
-    sequenceCell.textContent = i - 1;
+  for (var i = 0; i < rows.length; i++) {
+    var sequenceCell = rows[i].getElementsByTagName("td")[0];
+
+    sequenceCell.textContent = i + 1;
+  }
+  i_now = i;
+
+  var tbody_1 = document
+    .getElementsByClassName("headergrid2")[1]
+    .getElementsByTagName("tbody")[0];
+
+  // Get all rows in the tbody
+  var rows_1 = tbody_1.getElementsByTagName("tr");
+
+  // Iterate through the rows and add sequence number to the first cell
+  for (var i = 0; i < rows_1.length - 1; i++) {
+    var sequenceCell_1 = rows_1[i].getElementsByTagName("td")[0];
+
+    i_now++;
+    sequenceCell_1.textContent = i_now;
   }
 }
 
