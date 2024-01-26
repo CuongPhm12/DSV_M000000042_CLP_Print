@@ -483,7 +483,7 @@ function getData() {
                               ${
                                 i_present == repeat_tr.length - 1
                                   ? ` <tr class="rowsfooter" style="height: 13px">
-                                <td style="width: 212px; height: 13px"> </td>
+                                <td style="width: 212px; height: 13px;color:white;"> </td>
                                 <td style="width: 187px; height: 13px"> </td>
                                 <td style="width: 265px; height: 13px"> </td>
                                 <td style="width: 243px; height: 13px"> </td>
@@ -675,7 +675,7 @@ function getData() {
                               ${
                                 i_present == repeat_tr.length - 1
                                   ? ` <tr class="rowsfooter" style="height: 13px">
-                                <td style="width: 212px; height: 13px"> </td>
+                                <td style="width: 212px; height: 13px;color:white;"> </td>
                                 <td style="width: 187px; height: 13px"> </td>
                                 <td style="width: 265px; height: 13px"> </td>
                                 <td style="width: 243px; height: 13px"> </td>
@@ -798,12 +798,23 @@ for (let i = 0; i < elements_4.length; i++) {
   sum4 += a;
 }
 
-$(".sum-total-1")[0].innerText = formatNumber(getNum(sum1));
-$(".sum-total-2")[0].innerText = formatNumber(getNum(sum2));
-$(".sum-total-3")[0].innerText = formatNumber(getNum(sum3));
-$(".sum-total-3")[1].innerText = formatNumber(getNum(sum3));
-$(".sum-total-4")[0].innerText = formatNumber(getNum(sum4));
-$(".sum-total-4")[1].innerText = formatNumber(getNum(sum4));
+let elements_sum_1 = $(".sum-total-1");
+let elements_sum_2 = $(".sum-total-2");
+let elements_sum_3 = $(".sum-total-3");
+let elements_sum_4 = $(".sum-total-4");
+
+for (let i = 0; i < elements_sum_1.length; i++) {
+  elements_sum_1[i].innerText = formatNumber(getNum(sum1));
+}
+for (let i = 0; i < elements_sum_2.length; i++) {
+  elements_sum_2[i].innerText = formatNumber(getNum(sum2));
+}
+for (let i = 0; i < elements_sum_3.length; i++) {
+  elements_sum_3[i].innerText = formatNumber(getNum(sum3));
+}
+for (let i = 0; i < elements_sum_4.length; i++) {
+  elements_sum_4[i].innerText = formatNumber(getNum(sum4));
+}
 
 $(".sum-total-1").css("font-weight", "bold");
 $(".sum-total-2").css("font-weight", "bold");
@@ -844,35 +855,56 @@ function getNum(val) {
 function addSequenceNumbers() {
   let i_now = 0;
   // Get the tbody element
-  var tbody = document
-    .getElementsByClassName("headergrid2")[0]
-    .getElementsByTagName("tbody")[0];
+  let element = document.getElementsByClassName("headergrid2");
+  for (let i = 0; i < element.length; i++) {
+    var tbody = element[i].getElementsByTagName("tbody")[0];
+    // Get all rows in the tbody
+    var rows = tbody.getElementsByTagName("tr");
+    if (i > 0) {
+      for (var x = 0; x < rows.length; x++) {
+        var sequenceCell = rows[x].getElementsByTagName("td")[0];
+        i_now++;
+        sequenceCell.textContent = i_now;
+      }
+    } else {
+      for (var x = 0; x < rows.length; x++) {
+        var sequenceCell = rows[x].getElementsByTagName("td")[0];
 
-  // Get all rows in the tbody
-  var rows = tbody.getElementsByTagName("tr");
+        sequenceCell.textContent = x + 1;
+      }
+    }
 
-  // Iterate through the rows and add sequence number to the first cell
-  for (var i = 0; i < rows.length; i++) {
-    var sequenceCell = rows[i].getElementsByTagName("td")[0];
-
-    sequenceCell.textContent = i + 1;
+    i_now = x;
   }
-  i_now = i;
+  // var tbody =
+  //   document.getElementsByClassName("headergrid2")[0]
+  //   .getElementsByTagName("tbody")[0];
 
-  var tbody_1 = document
-    .getElementsByClassName("headergrid2")[1]
-    .getElementsByTagName("tbody")[0];
+  // // Get all rows in the tbody
+  // var rows = tbody.getElementsByTagName("tr");
 
-  // Get all rows in the tbody
-  var rows_1 = tbody_1.getElementsByTagName("tr");
+  // // Iterate through the rows and add sequence number to the first cell
+  // for (var i = 0; i < rows.length ; i++) {
+  //   var sequenceCell = rows[i].getElementsByTagName("td")[0];
 
-  // Iterate through the rows and add sequence number to the first cell
-  for (var i = 0; i < rows_1.length - 1; i++) {
-    var sequenceCell_1 = rows_1[i].getElementsByTagName("td")[0];
+  //   sequenceCell.textContent = i+1;
+  // }
+  // i_now= i;
 
-    i_now++;
-    sequenceCell_1.textContent = i_now;
-  }
+  // var tbody_1 =
+  //   document.getElementsByClassName("headergrid2")[1]
+  //   .getElementsByTagName("tbody")[0];
+
+  // // Get all rows in the tbody
+  // var rows_1 = tbody_1.getElementsByTagName("tr");
+
+  // // Iterate through the rows and add sequence number to the first cell
+  // for (var i = 0; i < rows_1.length-1 ; i++) {
+  //   var sequenceCell_1 = rows_1[i].getElementsByTagName("td")[0];
+
+  //   i_now++;
+  //   sequenceCell_1.textContent = i_now;
+  // }
 }
 
 // Combined function to run both functions on window.onload
