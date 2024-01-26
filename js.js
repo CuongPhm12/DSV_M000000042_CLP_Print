@@ -1,8 +1,11 @@
 $("#no_show").hide();
-
+let tbl_1 = "";
+let tbl_2 = "";
+let tbl_3 = "";
+let content_handle_after = "";
+let content_handle_finish = "";
 function getData() {
   let masterNo = $("#master_no").text().trim();
-
   const data_Send = {};
   data_Send.menucode = "M000000042";
   data_Send.type = "get_data";
@@ -14,8 +17,6 @@ function getData() {
     async: false,
     success: function (response, status, request) {
       const { res_master, res_detail, sql1, sql } = JSON.parse(response.trim());
-      // console.log({ res_master,res_detail,sql1,sql });
-      let is_complete = "";
       let m_createdate = res_master[0].master_createdate || "";
       let mawb = res_master[0].master_no || "";
       let m_dest = res_master[0].master_destination || "";
@@ -25,234 +26,200 @@ function getData() {
       let rate = res_master[0].rate || "";
       let remark = res_master[0].remark || "";
       let m_remark = "M Remark: " + res_master[0].master_remark || "";
-
-      is_complete = `
-                           <div id="title_table" style="display: flex">
-                              <table style="height: 49px; width: 771px" border="1">
+      tbl_1 = `
+                         <div id="title_table" style="display: flex">
+                            <table style="height: 49px; width: 771px" border="1">
+                              <tbody>
+                                <tr>
+                                  <td style="width: 79px; text-align: center">TEAM</td>
+                                  <td style="width: 79px; text-align: center">책임자</td>
+                                  <td style="width: 89.3px; text-align: center">서류</td>
+                                  <td style="width: 68.7px; text-align: center">면허</td>
+                                  <td style="width: 79px; text-align: center">사전전송</td>
+                                  <td style="width: 79px; text-align: center">CLP 마감</td>
+                                  <td style="width: 79px; text-align: center">출력마감</td>
+                                  <td style="width: 79px; text-align: center">적하</td>
+                                  <td style="width: 79px; text-align: center">반입계</td>
+                                </tr>
+                                <tr>
+                                  <td style="width: 79px; text-align: center"> </td>
+                                  <td style="width: 79px; text-align: center"> </td>
+                                  <td style="width: 89.3px; text-align: center">
+                                    <strong> 파일업로드여부</strong>
+                                  </td>
+                                  <td style="width: 68.7px; text-align: center"><strong> </strong></td>
+                                  <td style="width: 79px; text-align: center">
+                                    <strong> 전송완료여부</strong>
+                                  </td>
+                                  <td id="CLP_id" style="width: 79px; text-align: center">
+                                    <strong> </strong>
+                                  </td>
+                                  <td id="print_yn_id" style="width: 79px; text-align: center">
+                                    <strong> </strong>
+                                  </td>
+                                  <td style="width: 79px; text-align: center">
+                                    <strong> 전송완료여부</strong>
+                                  </td>
+                                  <td style="width: 79px; text-align: center">
+                                    <strong> 제작여부</strong>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div style="position: relative; white-space: nowrap">
+                              <table style="height: 13px" border="0" width="185">
                                 <tbody>
                                   <tr>
-                                    <td style="width: 79px; text-align: center">TEAM</td>
-                                    <td style="width: 79px; text-align: center">책임자</td>
-                                    <td style="width: 89.3px; text-align: center">서류</td>
-                                    <td style="width: 68.7px; text-align: center">면허</td>
-                                    <td style="width: 79px; text-align: center">사전전송</td>
-                                    <td style="width: 79px; text-align: center">CLP 마감</td>
-                                    <td style="width: 79px; text-align: center">출력마감</td>
-                                    <td style="width: 79px; text-align: center">적하</td>
-                                    <td style="width: 79px; text-align: center">반입계</td>
-                                  </tr>
-                                  <tr>
-                                    <td style="width: 79px; text-align: center"> </td>
-                                    <td style="width: 79px; text-align: center"> </td>
-                                    <td style="width: 89.3px; text-align: center">
-                                      <strong> 파일업로드여부</strong>
-                                    </td>
-                                    <td style="width: 68.7px; text-align: center"><strong> </strong></td>
-                                    <td style="width: 79px; text-align: center">
-                                      <strong> 전송완료여부</strong>
-                                    </td>
-                                    <td id="CLP_id" style="width: 79px; text-align: center">
-                                      <strong> </strong>
-                                    </td>
-                                    <td id="print_yn_id" style="width: 79px; text-align: center">
-                                      <strong> </strong>
-                                    </td>
-                                    <td style="width: 79px; text-align: center">
-                                      <strong> 전송완료여부</strong>
-                                    </td>
-                                    <td style="width: 79px; text-align: center">
-                                      <strong> 제작여부</strong>
+                                    <td id="m_createdate" style="width: 175px; text-align: right">
+                                      ${m_createdate}
                                     </td>
                                   </tr>
                                 </tbody>
                               </table>
-                              <div style="position: relative; white-space: nowrap">
-                                <table style="height: 13px" border="0" width="185">
-                                  <tbody>
-                                    <tr>
-                                      <td id="m_createdate" style="width: 175px; text-align: right">
-                                        ${m_createdate}
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
                             </div>
-                            <table
-                              id="data_table"
-                              class="headergrid2"
-                              style="height: 21px; width: 1373px"
-                              border="1"
-                            >
-                              <tbody>
-                                <tr style="height: 13px">
-                                  <td style="width: 3%; height: 13px; text-align: center">
-                                     <strong>MAWB#</strong>
-                                  </td>
-                                  <td id="mawb" style="width: 4%; height: 13px; text-align: center">
-                                   ${mawb}
-                                  </td>
-                                  <td style="width: 6%; height: 13px; text-align: center">
-                                    <strong>M/DEST</strong>
-                                  </td>
-                                  <td id="m_dest" style="width: 6%; height: 13px; text-align: center">
-                                    ${m_dest}
-                                  </td>
-                                  <td style="width: 6%; height: 13px; text-align: center">
-                                    <strong>FLT#</strong>
-                                  </td>
-                                  <td id="flt_no" style="width: 6%; height: 13px">
-                                   ${flt_no}
-                                  </td>
-                                  <td style="width: 6%; height: 13px; text-align: center">
-                                    <strong>ETD</strong>
-                                  </td>
-                                  <td id="etd" style="width: 8%; height: 13px">
-                                 ${etd}
-                                  </td>
-                                  <td id="etd_status" style="width: 6%; height: 13px; text-align: center">
-                                 ${etd_status}
-                                  </td>
-                                  <td style="width: 6%; height: 13px"> <strong>RATE</strong></td>
-                                  <td id="rate" style="width: 6%; height: 13px; text-align: center">
-                                    ${rate}
-                                  </td>
-                                  <td style="width: 2%; height: 13px"> </td>
-                                  <td style="width: 6%; height: 13px">  <strong>Remark</strong></td>
-                                  <td id="remark" style="width: auto; height: 13px; text-align: left" colspan="13">
-                                   ${remark}
-                                  </td>
-                                </tr>
-                                <tr class="rowsheader" style="height: 13px">
-                                  <td id="m_remark" style="width: 5792px; height: 13px" colspan="17">
-                                    <strong
-                                      > ${m_remark}
-                                    </strong>
-                                  </td>
-                                  <td style="width: 620px; height: 13px; text-align: center" colspan="2">
-                                    <strong>MAWB 마감중량</strong>
-                                  </td>
-                                  <td id="sum-3" style="width: 294px; height: 13px; text-align: right">
-                                     
-                                  </td>
-                                  <td id="sum-4" style="width: 265px; height: 13px; text-align: right">
-                                     
-                                  </td>
-                                  <td style="width: 413px; height: 13px; text-align: center" colspan="2">
-                                     
-                                  </td>
-                                </tr>
-                                <tr id="tr_lv2" class="rowsheader" style="height: 13px">
-                                  <td style="width: 212px; height: 13px"> </td>
-                                  <td style="width: 187px; height: 13px; text-align: center">
-                                    <strong>HAWB#</strong>
-                                  </td>
-                                  <td style="width: 265px; height: 13px; text-align: center">
-                                    <strong>SHPR</strong>
-                                  </td>
-                                  <td style="width: 243px; height: 13px; text-align: center">
-                                    <strong>CNEE</strong>
-                                  </td>
-                                  <td style="width: 243px; height: 13px; text-align: center">
-                                    <strong>H/DEST</strong>
-                                  </td>
-                                  <td style="width: 492.281px; height: 13px; text-align: center">
-                                    <strong>Q'ty</strong>
-                                  </td>
-                                  <td style="width: 530.719px; height: 13px; text-align: center">
-                                    <strong>G/WT</strong>
-                                  </td>
-                                  <td style="width: 558px; height: 13px; text-align: center">
-                                    <strong>V/WT</strong>
-                                  </td>
-                                  <td style="width: 262px; height: 13px; text-align: center">
-                                    <strong>DIMS</strong>
-                                  </td>
-                                  <td style="width: 264px; height: 13px; text-align: center">
-                                    <strong>면허</strong>
-                                  </td>
-                                  <td style="width: 285px; height: 13px; text-align: center">
-                                    <strong>배차</strong>
-                                  </td>
-                                  <td style="width: 220px; height: 13px; text-align: center">
-                                    <strong>입고</strong>
-                                  </td>
-                                  <td style="width: 403px; height: 13px; text-align: center">
-                                    <strong>출고</strong>
-                                  </td>
-                                  <td style="width: 451px; height: 13px; text-align: center">
-                                    <strong>INV#</strong>
-                                  </td>
-                                  <td style="width: 493px; height: 13px; text-align: center">
-                                    <strong>PO#</strong>
-                                  </td>
-                                  <td style="width: 345px; height: 13px; text-align: center">
-                                    <strong>H Remark</strong>
-                                  </td>
-                                  <td style="width: 338px; height: 13px; text-align: center">
-                                    <strong>담당자</strong>
-                                  </td>
-                                  <td style="width: 321px; height: 13px; text-align: center">
-                                    <strong>Selling</strong>
-                                  </td>
-                                  <td style="width: 299px; height: 13px; text-align: center">
-                                    <strong>Q'ty</strong>
-                                  </td>
-                                  <td style="width: 294px; height: 13px; text-align: center">
-                                    <strong>A.G/WT</strong>
-                                  </td>
-                                  <td style="width: 265px; height: 13px; text-align: center">
-                                    <strong>A.V/WT</strong>
-                                  </td>
-                                  <td style="width: 413px; height: 13px; text-align: center">
-                                    <strong>C/WT</strong>
-                                  </td>
-                                  <td style="width: 163px; height: 13px; text-align: center">
-                                    <strong>DIMS</strong>
-                                  </td>
-                                </tr>
-                            
-                                
-                                <tr class="rowsfooter" style="height: 13px">
-                                  <td style="width: 212px; height: 13px"> </td>
-                                  <td style="width: 187px; height: 13px"> </td>
-                                  <td style="width: 265px; height: 13px"> </td>
-                                  <td style="width: 243px; height: 13px"> </td>
-                                  <td style="width: 243px; height: 13px"> </td>
-                                  <td style="width: 492.281px; height: 13px"> </td>
-                                  <td style="width: 530.719px; height: 13px"> </td>
-                                  <td style="width: 558px; height: 13px"> </td>
-                                  <td style="width: 262px; height: 13px"> </td>
-                                  <td style="width: 264px; height: 13px"> </td>
-                                  <td style="width: 285px; height: 13px"> </td>
-                                  <td style="width: 220px; height: 13px"> </td>
-                                  <td style="width: 403px; height: 13px"> </td>
-                                  <td style="width: 451px; height: 13px"> </td>
-                                  <td style="width: 493px; height: 13px"> </td>
-                                  <td style="width: 345px; height: 13px"> </td>
-                                  <td style="width: 338px; height: 13px"> </td>
-                                  <td style="width: 321px; height: 13px; text-align: center">
-                                    <strong>HAWB</strong>
-                                  </td>
-                                  <td id="sum-1" style="width: 299px; height: 13px; text-align: right">
-                                     
-                                  </td>
-                                  <td style="width: 294px; height: 13px; text-align: center"> </td>
-                                  <td style="width: 265px; height: 13px; text-align: center">
-                                     <strong>Total</strong>
-                                  </td>
-                                  <td id="sum-2" style="width: 413px; height: 13px; text-align: right">
-                                     
-                                  </td>
-                                  <td style="width: 163px; height: 13px"> </td>
-                                </tr>
-                              </tbody>
-                            </table>
+                          </div>
+                          `;
 
-                       `;
-      //   is_complete += row_master;
-      //   console.log(is_complete);
-      $("#printDIV div").html(is_complete);
+      tbl_2 = `
+                          <table
+                            id="data_table"
+                            class="headergrid2"
+                            style="height: 21px; width: 1373px"
+                            border="1"
+                          >
+                            <thead>
+                              <tr style="height: 13px">
+                                <td style="width: 3%; height: 13px; text-align: center">
+                                   <strong>MAWB#</strong>
+                                </td>
+                                <td id="mawb" style="width: 4%; height: 13px; text-align: center">
+                                 ${mawb}
+                                </td>
+                                <td style="width: 6%; height: 13px; text-align: center">
+                                  <strong>M/DEST</strong>
+                                </td>
+                                <td id="m_dest" style="width: 6%; height: 13px; text-align: center">
+                                  ${m_dest}
+                                </td>
+                                <td style="width: 6%; height: 13px; text-align: center">
+                                  <strong>FLT#</strong>
+                                </td>
+                                <td id="flt_no" style="width: 6%; height: 13px">
+                                 ${flt_no}
+                                </td>
+                                <td style="width: 6%; height: 13px; text-align: center">
+                                  <strong>ETD</strong>
+                                </td>
+                                <td id="etd" style="width: 8%; height: 13px">
+                               ${etd}
+                                </td>
+                                <td id="etd_status" style="width: 6%; height: 13px; text-align: center">
+                               ${etd_status}
+                                </td>
+                                <td style="width: 6%; height: 13px"> <strong>RATE</strong></td>
+                                <td id="rate" style="width: 6%; height: 13px; text-align: center">
+                                  ${rate}
+                                </td>
+                                <td style="width: 2%; height: 13px"> </td>
+                                <td style="width: 6%; height: 13px">  <strong>Remark</strong></td>
+                                <td id="remark" style="width: auto; height: 13px; text-align: left" colspan="13">
+                                 ${remark}
+                                </td>
+                              </tr>
+                              <tr class="rowsheader" style="height: 13px">
+                                <td id="m_remark" style="width: 5792px; height: 13px" colspan="17">
+                                  <strong
+                                    > ${m_remark}
+                                  </strong>
+                                </td>
+                                <td style="width: 620px; height: 13px; text-align: center" colspan="2">
+                                  <strong>MAWB 마감중량</strong>
+                                </td>
+                                <td id="sum-3" style="width: 294px; height: 13px; text-align: right">
+                                   
+                                </td>
+                                <td id="sum-4" style="width: 265px; height: 13px; text-align: right">
+                                   
+                                </td>
+                                <td style="width: 413px; height: 13px; text-align: center" colspan="2">
+                                   
+                                </td>
+                              </tr>
+                              <tr id="tr_lv2" class="rowsheader" style="height: 13px">
+                                <td style="width: 212px; height: 13px"> </td>
+                                <td style="width: 187px; height: 13px; text-align: center">
+                                  <strong>HAWB#</strong>
+                                </td>
+                                <td style="width: 265px; height: 13px; text-align: center">
+                                  <strong>SHPR</strong>
+                                </td>
+                                <td style="width: 243px; height: 13px; text-align: center">
+                                  <strong>CNEE</strong>
+                                </td>
+                                <td style="width: 243px; height: 13px; text-align: center">
+                                  <strong>H/DEST</strong>
+                                </td>
+                                <td style="width: 492.281px; height: 13px; text-align: center">
+                                  <strong>Q'ty</strong>
+                                </td>
+                                <td style="width: 530.719px; height: 13px; text-align: center">
+                                  <strong>G/WT</strong>
+                                </td>
+                                <td style="width: 558px; height: 13px; text-align: center">
+                                  <strong>V/WT</strong>
+                                </td>
+                                <td style="width: 262px; height: 13px; text-align: center">
+                                  <strong>DIMS</strong>
+                                </td>
+                                <td style="width: 264px; height: 13px; text-align: center">
+                                  <strong>면허</strong>
+                                </td>
+                                <td style="width: 285px; height: 13px; text-align: center">
+                                  <strong>배차</strong>
+                                </td>
+                                <td style="width: 220px; height: 13px; text-align: center">
+                                  <strong>입고</strong>
+                                </td>
+                                <td style="width: 403px; height: 13px; text-align: center">
+                                  <strong>출고</strong>
+                                </td>
+                                <td style="width: 451px; height: 13px; text-align: center">
+                                  <strong>INV#</strong>
+                                </td>
+                                <td style="width: 493px; height: 13px; text-align: center">
+                                  <strong>PO#</strong>
+                                </td>
+                                <td style="width: 345px; height: 13px; text-align: center">
+                                  <strong>H Remark</strong>
+                                </td>
+                                <td style="width: 338px; height: 13px; text-align: center">
+                                  <strong>담당자</strong>
+                                </td>
+                                <td style="width: 321px; height: 13px; text-align: center">
+                                  <strong>Selling</strong>
+                                </td>
+                                <td style="width: 299px; height: 13px; text-align: center">
+                                  <strong>Q'ty</strong>
+                                </td>
+                                <td style="width: 294px; height: 13px; text-align: center">
+                                  <strong>A.G/WT</strong>
+                                </td>
+                                <td style="width: 265px; height: 13px; text-align: center">
+                                  <strong>A.V/WT</strong>
+                                </td>
+                                <td style="width: 413px; height: 13px; text-align: center">
+                                  <strong>C/WT</strong>
+                                </td>
+                                <td style="width: 163px; height: 13px; text-align: center">
+                                  <strong>DIMS</strong>
+                                </td>
+                              </tr>
+                             </thead>
+                             <tbody></tbody>
+                          </table>
+                              `;
+
+      $("#printDIV div").html(tbl_1 + tbl_2);
 
       var is_completee = "";
       for (let i = 0; i < res_detail.length; i++) {
@@ -279,80 +246,477 @@ function getData() {
         let charge_weight = item.charge_weight || "";
 
         let newRow = `
-                   <tr class="rowsrepeat" style="height: 13px">
-                      <td style="width: 212px; height: 13px; text-align: center"> </td>
-                      <td class="hawb_no" style="width: 187px; height: 13px">
-                        ${hawb_no}
-                      </td>
-                      <td class="shpr" style="width: 265px; height: 13px">
-                       ${shpr}
-                      </td>
-                      <td class="cnee" style="width: 243px; height: 13px">
-                        ${cnee}
-                      </td>
-                      <td class="h_dest" style="width: 243px; height: 13px">
-                       ${h_dest}
-                      </td>
-                      <td class="qty" style="width: 492.281px; height: 13px; text-align: right">
-                        ${qty}
-                      </td>
-                      <td class="g_wt" style="width: 530.719px; height: 13px; text-align: right">
-                        ${g_wt}
-                      </td>
-                      <td class ="volume_weight" style="width: 558px; height: 13px; text-align: right">
-                        ${volume_weight}
-                      </td>
-                      <td class="dims" style="width: 262px; height: 13px">
-                        ${dims}
-                      </td>
-                      <td class="custom_party" style="width: 264px; height: 13px">
-                         ${custom_party}
-                      </td>
-                      <td class="dom_transport" style="width: 285px; height: 13px">
-                         ${dom_transport}
-                      </td>
-                      <td class="dom_transport_date" style="width: 220px; height: 13px">
-                        ${dom_transport_date}
-                      </td>
-                      <td class="shipment" style="width: 403px; height: 13px">
-                       ${shipment}
-                      </td>
-                      <td class="invoice_no" style="width: 451px; height: 13px">
-                      ${invoice_no}
-                      </td>
-                      <td class="po_no" style="width: 493px; height: 13px">
-                       ${po_no}
-                      </td>
-                      <td class="shipping_mark_level" style="width: 345px; height: 13px">
-                        ${shipping_mark_level}
-                      </td>
-                      <td class="dsv_contact" style="width: 338px; height: 13px">
-                        ${dsv_contact}
-                      </td>
-                      <td class="notes" style="width: 321px; height: 13px">
-                        ${notes}
-                      <td class="sum-1" style="width: 299px; height: 13px; text-align: right">
-                        ${qty}
-                      </td>
-                      <td class="sum-3" style="width: 294px; height: 13px; text-align: right">
-                       ${g_wt}
-                      </td>
-                      <td class="sum-4" style="width: 265px; height: 13px; text-align: right">
-                       ${volume_weight} 
-                      </td>
-                      <td class="sum-2" style="width: 413px; height: 13px; text-align: right">
-                        ${charge_weight} 
-                      </td>
-                      <td style="width: 163px; height: 13px">
-                         ${dims}
-                      </td>
-                </tr>
-                `;
+                 <tr class="rowsrepeat" style="height: 13px">
+                    <td style="width: 212px; height: 13px; text-align: center"> </td>
+                    <td class="hawb_no" style="width: 187px; height: 13px">
+                      ${hawb_no}
+                    </td>
+                    <td class="shpr" style="width: 265px; height: 13px">
+                     ${shpr}
+                    </td>
+                    <td class="cnee" style="width: 243px; height: 13px">
+                      ${cnee}
+                    </td>
+                    <td class="h_dest" style="width: 243px; height: 13px">
+                     ${h_dest}
+                    </td>
+                    <td class="qty" style="width: 492.281px; height: 13px; text-align: right">
+                      ${qty}
+                    </td>
+                    <td class="g_wt" style="width: 530.719px; height: 13px; text-align: right">
+                      ${g_wt}
+                    </td>
+                    <td class ="volume_weight" style="width: 558px; height: 13px; text-align: right">
+                      ${volume_weight}
+                    </td>
+                    <td class="dims" style="width: 262px; height: 13px">
+                      ${dims}
+                    </td>
+                    <td class="custom_party" style="width: 264px; height: 13px">
+                       ${custom_party}
+                    </td>
+                    <td class="dom_transport" style="width: 285px; height: 13px">
+                       ${dom_transport}
+                    </td>
+                    <td class="dom_transport_date" style="width: 220px; height: 13px">
+                      ${dom_transport_date}
+                    </td>
+                    <td class="shipment" style="width: 403px; height: 13px">
+                     ${shipment}
+                    </td>
+                    <td class="invoice_no" style="width: 451px; height: 13px">
+                    ${invoice_no}
+                    </td>
+                    <td class="po_no" style="width: 493px; height: 13px">
+                     ${po_no}
+                    </td>
+                    <td class="shipping_mark_level" style="width: 345px; height: 13px">
+                      ${shipping_mark_level}
+                    </td>
+                    <td class="dsv_contact" style="width: 338px; height: 13px">
+                      ${dsv_contact}
+                    </td>
+                    <td class="notes" style="width: 321px; height: 13px">
+                      ${notes}
+                    <td class="sum-1" style="width: 299px; height: 13px; text-align: right">
+                      ${qty}
+                    </td>
+                    <td class="sum-3" style="width: 294px; height: 13px; text-align: right">
+                     ${g_wt}
+                    </td>
+                    <td class="sum-4" style="width: 265px; height: 13px; text-align: right">
+                     ${volume_weight} 
+                    </td>
+                    <td class="sum-2" style="width: 413px; height: 13px; text-align: right">
+                      ${charge_weight} 
+                    </td>
+                    <td style="width: 163px; height: 13px">
+                       ${dims}
+                    </td>
+              </tr>
+              `;
 
         is_completee += newRow;
       }
 
-      $("#tr_lv2").after(is_completee);
+      $("#data_table tbody").append(is_completee);
+      let height = $("#printDIV").height();
+
+      let height_tbl1 = $("#title_table").height();
+      let height_tbl2_thead = $("#data_table thead").height();
+      let sum_header_height = height_tbl1 + height_tbl2_thead;
+
+      let repeat_tr = $("#data_table .rowsrepeat");
+      let sum_height = sum_header_height;
+      let i_present = 0;
+      let index = 0;
+
+      let content_handle = tbl_1 + tbl_2;
+
+      for (let i = i_present; i < repeat_tr.length; i++) {
+        index++;
+        if (sum_height < 800) {
+          if (i == repeat_tr.length - 1) {
+            content_handle_after += repeat_tr[i].outerHTML;
+
+            //  sum_height+= $(repeat_tr[i]).height();
+            //  console.log(1)
+            //  i_present++;
+            let content_value = `
+                          <table
+                            id="data_table"
+                            class="headergrid2"
+                            style="height: 21px; width: 1373px"
+                            border="1"
+                          >
+                            <thead>
+                              <tr style="height: 13px">
+                                <td style="width: 3%; height: 13px; text-align: center">
+                                   <strong>MAWB#</strong>
+                                </td>
+                                <td id="mawb" style="width: 4%; height: 13px; text-align: center">
+                                 ${mawb}
+                                </td>
+                                <td style="width: 6%; height: 13px; text-align: center">
+                                  <strong>M/DEST</strong>
+                                </td>
+                                <td id="m_dest" style="width: 6%; height: 13px; text-align: center">
+                                  ${m_dest}
+                                </td>
+                                <td style="width: 6%; height: 13px; text-align: center">
+                                  <strong>FLT#</strong>
+                                </td>
+                                <td id="flt_no" style="width: 6%; height: 13px">
+                                 ${flt_no}
+                                </td>
+                                <td style="width: 6%; height: 13px; text-align: center">
+                                  <strong>ETD</strong>
+                                </td>
+                                <td id="etd" style="width: 8%; height: 13px">
+                               ${etd}
+                                </td>
+                                <td id="etd_status" style="width: 6%; height: 13px; text-align: center">
+                               ${etd_status}
+                                </td>
+                                <td style="width: 6%; height: 13px"> <strong>RATE</strong></td>
+                                <td id="rate" style="width: 6%; height: 13px; text-align: center">
+                                  ${rate}
+                                </td>
+                                <td style="width: 2%; height: 13px"> </td>
+                                <td style="width: 6%; height: 13px">  <strong>Remark</strong></td>
+                                <td id="remark" style="width: auto; height: 13px; text-align: left" colspan="13">
+                                 ${remark}
+                                </td>
+                              </tr>
+                              <tr class="rowsheader" style="height: 13px">
+                                <td id="m_remark" style="width: 5792px; height: 13px" colspan="17">
+                                  <strong
+                                    > ${m_remark}
+                                  </strong>
+                                </td>
+                                <td style="width: 620px; height: 13px; text-align: center" colspan="2">
+                                  <strong>MAWB 마감중량</strong>
+                                </td>
+                                <td id="sum-3" style="width: 294px; height: 13px; text-align: right">
+                                   
+                                </td>
+                                <td id="sum-4" style="width: 265px; height: 13px; text-align: right">
+                                   
+                                </td>
+                                <td style="width: 413px; height: 13px; text-align: center" colspan="2">
+                                   
+                                </td>
+                              </tr>
+                              <tr id="tr_lv2" class="rowsheader" style="height: 13px">
+                                <td style="width: 212px; height: 13px"> </td>
+                                <td style="width: 187px; height: 13px; text-align: center">
+                                  <strong>HAWB#</strong>
+                                </td>
+                                <td style="width: 265px; height: 13px; text-align: center">
+                                  <strong>SHPR</strong>
+                                </td>
+                                <td style="width: 243px; height: 13px; text-align: center">
+                                  <strong>CNEE</strong>
+                                </td>
+                                <td style="width: 243px; height: 13px; text-align: center">
+                                  <strong>H/DEST</strong>
+                                </td>
+                                <td style="width: 492.281px; height: 13px; text-align: center">
+                                  <strong>Q'ty</strong>
+                                </td>
+                                <td style="width: 530.719px; height: 13px; text-align: center">
+                                  <strong>G/WT</strong>
+                                </td>
+                                <td style="width: 558px; height: 13px; text-align: center">
+                                  <strong>V/WT</strong>
+                                </td>
+                                <td style="width: 262px; height: 13px; text-align: center">
+                                  <strong>DIMS</strong>
+                                </td>
+                                <td style="width: 264px; height: 13px; text-align: center">
+                                  <strong>면허</strong>
+                                </td>
+                                <td style="width: 285px; height: 13px; text-align: center">
+                                  <strong>배차</strong>
+                                </td>
+                                <td style="width: 220px; height: 13px; text-align: center">
+                                  <strong>입고</strong>
+                                </td>
+                                <td style="width: 403px; height: 13px; text-align: center">
+                                  <strong>출고</strong>
+                                </td>
+                                <td style="width: 451px; height: 13px; text-align: center">
+                                  <strong>INV#</strong>
+                                </td>
+                                <td style="width: 493px; height: 13px; text-align: center">
+                                  <strong>PO#</strong>
+                                </td>
+                                <td style="width: 345px; height: 13px; text-align: center">
+                                  <strong>H Remark</strong>
+                                </td>
+                                <td style="width: 338px; height: 13px; text-align: center">
+                                  <strong>담당자</strong>
+                                </td>
+                                <td style="width: 321px; height: 13px; text-align: center">
+                                  <strong>Selling</strong>
+                                </td>
+                                <td style="width: 299px; height: 13px; text-align: center">
+                                  <strong>Q'ty</strong>
+                                </td>
+                                <td style="width: 294px; height: 13px; text-align: center">
+                                  <strong>A.G/WT</strong>
+                                </td>
+                                <td style="width: 265px; height: 13px; text-align: center">
+                                  <strong>A.V/WT</strong>
+                                </td>
+                                <td style="width: 413px; height: 13px; text-align: center">
+                                  <strong>C/WT</strong>
+                                </td>
+                                <td style="width: 163px; height: 13px; text-align: center">
+                                  <strong>DIMS</strong>
+                                </td>
+                              </tr>
+                             </thead>
+                             <tbody>
+                             ${content_handle_after}
+                              ${
+                                index == repeat_tr.length
+                                  ? ` <tr class="rowsfooter" style="height: 13px">
+                                <td style="width: 212px; height: 13px"> </td>
+                                <td style="width: 187px; height: 13px"> </td>
+                                <td style="width: 265px; height: 13px"> </td>
+                                <td style="width: 243px; height: 13px"> </td>
+                                <td style="width: 243px; height: 13px"> </td>
+                                <td style="width: 492.281px; height: 13px"> </td>
+                                <td style="width: 530.719px; height: 13px"> </td>
+                                <td style="width: 558px; height: 13px"> </td>
+                                <td style="width: 262px; height: 13px"> </td>
+                                <td style="width: 264px; height: 13px"> </td>
+                                <td style="width: 285px; height: 13px"> </td>
+                                <td style="width: 220px; height: 13px"> </td>
+                                <td style="width: 403px; height: 13px"> </td>
+                                <td style="width: 451px; height: 13px"> </td>
+                                <td style="width: 493px; height: 13px"> </td>
+                                <td style="width: 345px; height: 13px"> </td>
+                                <td style="width: 338px; height: 13px"> </td>
+                                <td style="width: 321px; height: 13px; text-align: center">
+                                  <strong>HAWB</strong>
+                                </td>
+                                <td id="sum-1" style="width: 299px; height: 13px; text-align: right">
+                                   
+                                </td>
+                                <td style="width: 294px; height: 13px; text-align: center"> </td>
+                                <td style="width: 265px; height: 13px; text-align: center">
+                                   <strong>Total</strong>
+                                </td>
+                                <td id="sum-2" style="width: 413px; height: 13px; text-align: right">
+                                   
+                                </td>
+                                <td style="width: 163px; height: 13px"> </td>
+                              </tr> `
+                                  : ""
+                              } 
+                             </tbody>
+                          </table>
+                          `;
+            content_handle_finish += tbl_1 + content_value;
+          } else {
+            // console.log(sum_height,$(repeat_tr[i]).height() )
+            content_handle_after += repeat_tr[i].outerHTML;
+            sum_height += $(repeat_tr[i]).height();
+            //  console.log(1)
+            i_present++;
+          }
+        } else {
+          //   console.log(2)
+          let content_value = `
+                          <table
+                            id="data_table"
+                            class="headergrid2"
+                            style="height: 21px; width: 1373px"
+                            border="1"
+                          >
+                            <thead>
+                              <tr style="height: 13px">
+                                <td style="width: 3%; height: 13px; text-align: center">
+                                   <strong>MAWB#</strong>
+                                </td>
+                                <td id="mawb" style="width: 4%; height: 13px; text-align: center">
+                                 ${mawb}
+                                </td>
+                                <td style="width: 6%; height: 13px; text-align: center">
+                                  <strong>M/DEST</strong>
+                                </td>
+                                <td id="m_dest" style="width: 6%; height: 13px; text-align: center">
+                                  ${m_dest}
+                                </td>
+                                <td style="width: 6%; height: 13px; text-align: center">
+                                  <strong>FLT#</strong>
+                                </td>
+                                <td id="flt_no" style="width: 6%; height: 13px">
+                                 ${flt_no}
+                                </td>
+                                <td style="width: 6%; height: 13px; text-align: center">
+                                  <strong>ETD</strong>
+                                </td>
+                                <td id="etd" style="width: 8%; height: 13px">
+                               ${etd}
+                                </td>
+                                <td id="etd_status" style="width: 6%; height: 13px; text-align: center">
+                               ${etd_status}
+                                </td>
+                                <td style="width: 6%; height: 13px"> <strong>RATE</strong></td>
+                                <td id="rate" style="width: 6%; height: 13px; text-align: center">
+                                  ${rate}
+                                </td>
+                                <td style="width: 2%; height: 13px"> </td>
+                                <td style="width: 6%; height: 13px">  <strong>Remark</strong></td>
+                                <td id="remark" style="width: auto; height: 13px; text-align: left" colspan="13">
+                                 ${remark}
+                                </td>
+                              </tr>
+                              <tr class="rowsheader" style="height: 13px">
+                                <td id="m_remark" style="width: 5792px; height: 13px" colspan="17">
+                                  <strong
+                                    > ${m_remark}
+                                  </strong>
+                                </td>
+                                <td style="width: 620px; height: 13px; text-align: center" colspan="2">
+                                  <strong>MAWB 마감중량</strong>
+                                </td>
+                                <td id="sum-3" style="width: 294px; height: 13px; text-align: right">
+                                   
+                                </td>
+                                <td id="sum-4" style="width: 265px; height: 13px; text-align: right">
+                                   
+                                </td>
+                                <td style="width: 413px; height: 13px; text-align: center" colspan="2">
+                                   
+                                </td>
+                              </tr>
+                              <tr id="tr_lv2" class="rowsheader" style="height: 13px">
+                                <td style="width: 212px; height: 13px"> </td>
+                                <td style="width: 187px; height: 13px; text-align: center">
+                                  <strong>HAWB#</strong>
+                                </td>
+                                <td style="width: 265px; height: 13px; text-align: center">
+                                  <strong>SHPR</strong>
+                                </td>
+                                <td style="width: 243px; height: 13px; text-align: center">
+                                  <strong>CNEE</strong>
+                                </td>
+                                <td style="width: 243px; height: 13px; text-align: center">
+                                  <strong>H/DEST</strong>
+                                </td>
+                                <td style="width: 492.281px; height: 13px; text-align: center">
+                                  <strong>Q'ty</strong>
+                                </td>
+                                <td style="width: 530.719px; height: 13px; text-align: center">
+                                  <strong>G/WT</strong>
+                                </td>
+                                <td style="width: 558px; height: 13px; text-align: center">
+                                  <strong>V/WT</strong>
+                                </td>
+                                <td style="width: 262px; height: 13px; text-align: center">
+                                  <strong>DIMS</strong>
+                                </td>
+                                <td style="width: 264px; height: 13px; text-align: center">
+                                  <strong>면허</strong>
+                                </td>
+                                <td style="width: 285px; height: 13px; text-align: center">
+                                  <strong>배차</strong>
+                                </td>
+                                <td style="width: 220px; height: 13px; text-align: center">
+                                  <strong>입고</strong>
+                                </td>
+                                <td style="width: 403px; height: 13px; text-align: center">
+                                  <strong>출고</strong>
+                                </td>
+                                <td style="width: 451px; height: 13px; text-align: center">
+                                  <strong>INV#</strong>
+                                </td>
+                                <td style="width: 493px; height: 13px; text-align: center">
+                                  <strong>PO#</strong>
+                                </td>
+                                <td style="width: 345px; height: 13px; text-align: center">
+                                  <strong>H Remark</strong>
+                                </td>
+                                <td style="width: 338px; height: 13px; text-align: center">
+                                  <strong>담당자</strong>
+                                </td>
+                                <td style="width: 321px; height: 13px; text-align: center">
+                                  <strong>Selling</strong>
+                                </td>
+                                <td style="width: 299px; height: 13px; text-align: center">
+                                  <strong>Q'ty</strong>
+                                </td>
+                                <td style="width: 294px; height: 13px; text-align: center">
+                                  <strong>A.G/WT</strong>
+                                </td>
+                                <td style="width: 265px; height: 13px; text-align: center">
+                                  <strong>A.V/WT</strong>
+                                </td>
+                                <td style="width: 413px; height: 13px; text-align: center">
+                                  <strong>C/WT</strong>
+                                </td>
+                                <td style="width: 163px; height: 13px; text-align: center">
+                                  <strong>DIMS</strong>
+                                </td>
+                              </tr>
+                             </thead>
+                             <tbody>
+                             ${content_handle_after}
+                              ${
+                                index == repeat_tr.length
+                                  ? ` <tr class="rowsfooter" style="height: 13px">
+                                <td style="width: 212px; height: 13px"> </td>
+                                <td style="width: 187px; height: 13px"> </td>
+                                <td style="width: 265px; height: 13px"> </td>
+                                <td style="width: 243px; height: 13px"> </td>
+                                <td style="width: 243px; height: 13px"> </td>
+                                <td style="width: 492.281px; height: 13px"> </td>
+                                <td style="width: 530.719px; height: 13px"> </td>
+                                <td style="width: 558px; height: 13px"> </td>
+                                <td style="width: 262px; height: 13px"> </td>
+                                <td style="width: 264px; height: 13px"> </td>
+                                <td style="width: 285px; height: 13px"> </td>
+                                <td style="width: 220px; height: 13px"> </td>
+                                <td style="width: 403px; height: 13px"> </td>
+                                <td style="width: 451px; height: 13px"> </td>
+                                <td style="width: 493px; height: 13px"> </td>
+                                <td style="width: 345px; height: 13px"> </td>
+                                <td style="width: 338px; height: 13px"> </td>
+                                <td style="width: 321px; height: 13px; text-align: center">
+                                  <strong>HAWB</strong>
+                                </td>
+                                <td id="sum-1" style="width: 299px; height: 13px; text-align: right">
+                                   
+                                </td>
+                                <td style="width: 294px; height: 13px; text-align: center"> </td>
+                                <td style="width: 265px; height: 13px; text-align: center">
+                                   <strong>Total</strong>
+                                </td>
+                                <td id="sum-2" style="width: 413px; height: 13px; text-align: right">
+                                   
+                                </td>
+                                <td style="width: 163px; height: 13px"> </td>
+                              </tr> `
+                                  : ""
+                              } 
+                             </tbody>
+                          </table>
+                          <div class="page-break" style="page-break-before: always"></div>
+                          `;
+          content_handle_finish += tbl_1 + content_value;
+          content_handle_after = "";
+          sum_height = 0;
+        }
+      }
+
+      $("#printDIV div").empty();
+      $("#printDIV div").append(content_handle_finish);
+
+      //   console.log(content_handle_finish)
 
       let release_request = res_master[0].release_request || "";
       let print_yn = res_master[0].print_yn || "";
@@ -369,17 +733,8 @@ function getData() {
     },
   });
 }
-getData();
 
-// $("#printDIV div").hide();
-let height = $("#printDIV").height();
-if (height > 757) {
-  //     let a=$("#printDIV div").clone()
-  //     console.log(a)
-  //   $("#printDIV").append(a);
-  // // $("#title_table").clone().appendTo(("#printDIV div"));
-}
-console.log(height);
+getData();
 
 //Declare variable
 let elements_1 = $(".sum-1");
