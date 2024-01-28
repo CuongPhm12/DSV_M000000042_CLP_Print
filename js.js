@@ -323,6 +323,7 @@ function getData() {
       $(".headergrid2 tbody").append(is_completee);
       let height = $("#printDIV").height();
 
+      //handle main task
       let height_tbl1 = $(".title_table").height();
       let height_tbl2_thead = $(".headergrid2 thead").height();
       let sum_header_height = height_tbl1 + height_tbl2_thead;
@@ -330,12 +331,12 @@ function getData() {
       let repeat_tr = $(".headergrid2 .rowsrepeat");
       let sum_height = sum_header_height;
       let i_present = 0;
-      let index = 0;
+      let done_flag = false;
 
       let content_handle = tbl_1 + tbl_2;
       while (i_present < repeat_tr.length) {
         // for(let i=i_present; i<repeat_tr.length;i++){
-        index++;
+        // index++;
         if (sum_height + $(repeat_tr[i_present]).height() < 800) {
           if (i_present == repeat_tr.length - 1) {
             content_handle_after += repeat_tr[i_present].outerHTML;
@@ -529,6 +530,9 @@ function getData() {
             sum_height += $(repeat_tr[i_present]).height();
             //  console.log(1)
             i_present++;
+            if (i_present == repeat_tr.length - 1) {
+              done_flag == true;
+            }
           }
         } else {
           //   console.log(2)
@@ -673,7 +677,8 @@ function getData() {
                              <tbody>
                              ${content_handle_after}
                               ${
-                                i_present == repeat_tr.length - 1
+                                i_present == repeat_tr.length - 1 &&
+                                done_flag == true
                                   ? ` <tr class="rowsfooter" style="height: 13px">
                                 <td style="width: 212px; height: 13px;color:white;"> </td>
                                 <td style="width: 187px; height: 13px"> </td>
@@ -872,9 +877,8 @@ function addSequenceNumbers() {
 
         sequenceCell.textContent = x + 1;
       }
+      i_now = x;
     }
-
-    i_now = x;
   }
   // var tbody =
   //   document.getElementsByClassName("headergrid2")[0]
